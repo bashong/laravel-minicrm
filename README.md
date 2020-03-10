@@ -20,4 +20,8 @@ php artisan migrate --seed<br>
 php artisan storage:link<br>
 
 
-Access your app on your browser!
+Access your app on your browser!<br><br><br>
+
+Credentials:<br>
+email : admin@admin.com<br>
+password : password
