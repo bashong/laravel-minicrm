@@ -1,7 +1,7 @@
 # laravel-tester
-composer install
-cp .env.example .env
-php artisan key:generate
+;composer install
+;cp .env.example .env
+;php artisan key:generate
 
 ;before running the command below, edit your AppServiceProvider.php file and inside the boot method set a default string length: 
 	
@@ -13,5 +13,5 @@ php artisan key:generate
 		Schema::defaultStringLength(191);
 	}
 	
-php artisan migrate --seed
-php artisan storage:link
+;php artisan migrate --seed
+;php artisan storage:link
