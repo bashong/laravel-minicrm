@@ -18,3 +18,6 @@ vi app/Providers/AppServiceProvider.php
 	
 php artisan migrate --seed<br>
 php artisan storage:link<br>
+
+
+Access your app on your browser!
