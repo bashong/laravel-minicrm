@@ -4,6 +4,9 @@ cp .env.example .env<br>
 php artisan key:generate<br>
 
 ;before running the command below, edit your AppServiceProvider.php file and inside the boot method set a default string length: 
+
+
+vi app/Providers/AppServiceProvider.php
 	
   
     use Illuminate\Support\Facades\Schema;
