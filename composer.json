@@ -7,11 +7,17 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
+        "jackiedo/timezonelist": "5.*",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "luthfi/formfield": "^0.2.5"
+        "luthfi/formfield": "^0.2.5",
+        "maatwebsite/excel": "^3.1",
+        "mcamara/laravel-localization": "^1.5",
+        "tymon/jwt-auth": "^1.0",
+        "waavi/translation": "2.3.3"
     },
     "require-dev": {
+        "bfinlay/laravel-excel-seeder": "^2.1",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "luthfi/simple-crud-generator": "^1.0",

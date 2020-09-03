@@ -25,7 +25,7 @@ return [
     'undeleteable'   => 'Employee data cannot be deleted.',
 
     // Attributes
-    'name'       => 'Employee Name',
+    'name'       => 'Name',
     'first_name' => 'First Name',
     'last_name'  => 'Last Name',
     'company'    => 'Company',

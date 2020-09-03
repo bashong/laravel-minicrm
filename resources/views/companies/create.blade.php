@@ -1,12 +1,17 @@
-@extends('layouts.app')
+@extends('master')
 
-@section('title', trans('company.create'))
+@section('content-header', trans('company.create'))
+@section('breadcrumb-active', trans('company.create'))
 
 @section('content')
-<div class="row">
-    <div class="col-md-6 col-md-offset-3">
+<div class="card card-info">
+    <div class="card-body">
         <div class="panel panel-default">
-            <div class="panel-heading text-center h3">{{ trans('company.create') }}</div>
+            <div class="card card-info">
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center">
+                    <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-default ">
             {!! Form::open(['route' => 'companies.store']) !!}
             <div class="panel-body">
                 {!! FormField::text('name', ['required' => true, 'label' => trans('company.name')]) !!}
@@ -21,5 +26,10 @@
             {!! Form::close() !!}
         </div>
     </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
 </div>
 @endsection

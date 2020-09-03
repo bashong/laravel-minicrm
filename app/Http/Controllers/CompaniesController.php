@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Company;
+use App\Employee;
 use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyLogoUploadRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use Illuminate\Http\Request;
 use Storage;
 
+use Carbon\Carbon;
+
+Use App\Mail\UserNotify;
+use Illuminate\Support\Facades\Mail;
+
 class CompaniesController extends Controller
 {
 
     public function index()
-    {
-        $companies = Company::where(function ($query) {
-            $query->where('name', 'like', '%'.request('q').'%');
-        })->paginate();
+    {   
 
-        return view('companies.index', compact('companies'));
+        
+        $companyList = Company::pluck('name', 'id'); 
+        return view('companies.index', compact('companyList','timezonelist'));
+
     }
 
 
@@ -33,9 +40,12 @@ class CompaniesController extends Controller
     public function store(CompanyCreateRequest $request)
     {
         $newCompany = $request->validated();
-        $newCompany['creator_id'] = auth()->id();
+        $newCompany['created_by'] = auth()->id();
+        $newCompany['updated_by'] = auth()->id();
 
         $company = Company::create($newCompany);
+
+        Mail::to($request->user())->queue(new UserNotify($company));
 
         return redirect()->route('companies.show', $company);
     }
@@ -63,7 +73,10 @@ class CompaniesController extends Controller
 
     public function update(CompanyUpdateRequest $request, Company $company)
     {
-        $company->update($request->validated());
+        $companyData = $request->validated();
+        $companyData['updated_by'] = auth()->id();
+        $company->update($companyData);
+        // dd($company);
 
         return redirect()->route('companies.show', $company);
     }
@@ -78,7 +91,6 @@ class CompaniesController extends Controller
         ]);
 
         $routeParam = request()->only('page', 'q');
-
         if (request('company_id') == $company->id && $company->delete()) {
             return redirect()->route('companies.index', $routeParam);
         }
@@ -99,5 +111,64 @@ class CompaniesController extends Controller
         $company->save();
 
         return back();
+    }
+
+    public function search(Request $request){
+
+
+        $timezone = $request->session()->get('newTimeZone') ?? null;
+
+        if($request->datetime){
+            $dates = explode(' - ', $request->datetime);
+            $start_date = trim($dates[0]);
+            $end_date = trim($dates[1]);
+
+            if($timezone){
+                $start_date = Carbon::createFromFormat('Y-m-d H:i:s', trim($dates[0]),$timezone)->setTimezone(config('app.timezone'));
+                $end_date = Carbon::createFromFormat('Y-m-d H:i:s', trim($dates[1]),$timezone)->setTimezone(config('app.timezone'));
+            }
+
+            $search[] = ['created_at' , '>=' , $start_date];
+            $search[] = ['created_at' , '<=' , $end_date];
+           
+        }
+        if($request->company){
+            $company=$request->company;
+            $search[] = ['id', $company];            
+        }
+        if($request->website){
+            $website=$request->website;
+            $search[] = ['website', 'like', "%$website%"];            
+        }
+
+        $companies = Company::where($search);
+
+        $company = $companies->get()->map(function($item, $key) use($timezone) {
+
+            // created_at
+            // updated_at
+
+            extract($item->toArray());
+            if($timezone){
+                $dateCreated = Carbon::createFromFormat('Y-m-d H:i:s', $created_at);
+                $dateCreated->setTimezone($timezone);
+                
+                $dateUpdated = Carbon::createFromFormat('Y-m-d H:i:s', $updated_at);
+                $dateUpdated->setTimezone($timezone);
+                
+                $item->created_at = $dateCreated;
+                $item->updated_at = $dateUpdated;
+            }
+
+
+            $item->action = '<a target="_blank" href="companies/'.$id.'">View Details</a>';
+            return $item;
+
+        });
+
+
+        // dd($companies);
+
+        return response()->json(["data" => $company]);
     }
 }

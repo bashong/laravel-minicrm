@@ -12,12 +12,22 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
+    // return view('welcome');
+});
+Route::group(['prefix' => LaravelLocalization::setLocale()], function()
+{
+
+
+Route::get('/ping',function(){
+    return response()->json(["message","PONG"]);
 });
 
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
+
+// Route::post('login', 'AuthController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Password Reset Routes...
@@ -34,7 +44,22 @@ Route::group(['middleware' => 'auth'], function () {
         'as'   => 'companies.logo-upload',
         'uses' => 'CompaniesController@logoUpload',
     ]);
-    Route::resource('companies', 'CompaniesController');
 
+    Route::resource('companies', 'CompaniesController');
     Route::resource('employees', 'EmployeesController');
+
+    Route::post('searchCompany', 'CompaniesController@search')->name('company.search');
+    Route::post('searchEmployee', 'EmployeesController@search')->name('employee.search');
+
+    Route::post('/changeTimezone','HomeController@changeTimezone');
+
+
+    //reporting import/export
+    Route::match(['get', 'post'],'{which}/{name}','Excel\ExcelController@index',function($which){
+        // return $which;
+    })->where("which","import|export")->name("excelFile");
+
+    //tester
+    Route::get('sendmail', 'Excel\ExcelController@test_mailer');
+});
 });

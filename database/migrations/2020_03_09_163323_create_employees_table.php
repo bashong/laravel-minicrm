@@ -18,6 +18,8 @@ class CreateEmployeesTable extends Migration
             $table->string('first_name', 60);
             $table->string('last_name', 60);
             $table->unsignedInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')
+            ->onDelete('cascade');
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->unsignedInteger('creator_id');

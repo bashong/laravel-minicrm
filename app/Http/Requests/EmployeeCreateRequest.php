@@ -27,6 +27,7 @@ class EmployeeCreateRequest extends FormRequest
         return [
             'first_name' => 'required|max:60',
             'last_name'  => 'required|max:60',
+            'password'  => 'required|max:60',
             'company_id' => 'required|numeric|exists:companies,id',
             'email'      => 'nullable|email|max:255',
             'phone'      => 'nullable|max:255',
