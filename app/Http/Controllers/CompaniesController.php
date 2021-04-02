@@ -24,7 +24,7 @@ class CompaniesController extends Controller
 
         
         $companyList = Company::pluck('name', 'id'); 
-        return view('companies.index', compact('companyList','timezonelist'));
+        return view('companies.index', compact('companyList'));
 
     }
 
@@ -45,7 +45,10 @@ class CompaniesController extends Controller
 
         $company = Company::create($newCompany);
 
-        Mail::to($request->user())->queue(new UserNotify($company));
+        /**
+         * for email notification
+         */
+        //Mail::to($request->user())->queue(new UserNotify($company));
 
         return redirect()->route('companies.show', $company);
     }
