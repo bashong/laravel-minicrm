@@ -39,7 +39,7 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
+        'mysql2' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             // 'timezone'  => '+00:00',
@@ -52,6 +52,22 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => true,
+            'engine' => null,
+        ],
+
+        'mysql' => [
+            'driver' => 'mysql',
+            'host' => 'remotemysql.com',
+            // 'timezone'  => '+00:00',
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'u8QWdf6c5d',
+            'username' => 'u8QWdf6c5d',
+            'password' => '9hantXA467',
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
             'engine' => null,
         ],
 
